@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- Spring Boot's own parent project. It fixes safe, tested version
+         numbers for every Spring library below, so we don't have to pick
+         version numbers ourselves. -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.3.4</version>
+        <relativePath/>
+    </parent>
+
+    <groupId>com.hsb</groupId>
+    <artifactId>createhsbbill</artifactId>
+    <version>1.0.0</version>
+
+    <!-- "war" because this is deployed into WildFly, not run on its own. -->
+    <packaging>war</packaging>
+
+    <name>createhsbbill</name>
+    <description>
+        BillPrint.pas to Java migration. Loads bill data into the
+        area(code)cycle(cycle)prt table - the same job as
+        TBillPrint.bill_pint_from_table in the old Delphi program.
+        Built and tested one part at a time. Part 1: the insert mechanism only.
+    </description>
+
+    <properties>
+        <java.version>17</java.version>
+    </properties>
+
+    <dependencies>
+        <!-- Gives us @RestController, @RequestMapping, JSON responses, etc. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- Gives us JdbcTemplate, for writing plain SQL by hand.
+             We use this instead of JPA because our table name changes on
+             every request (area<code>cycle<cycle>prt) - JPA/Hibernate needs
+             one fixed table name, so it cannot describe this table.
+             See BillPrintFieldRepository for where this is used. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+
+        <!-- WildFly already provides its own servlet container, so the
+             embedded Tomcat that spring-boot-starter-web normally brings in
+             must NOT be packaged into the WAR. "provided" scope compiles
+             against it but leaves it out of the final .war file. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <!-- Produces target/createhsbbill.war -->
+        <finalName>createhsbbill</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

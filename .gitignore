@@ -22,3 +22,23 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
+
+# Build output - Maven rebuilds this from source every time, so it never
+# needs to be stored in git.
+target/
+
+# IDE-specific files - these are personal to each developer's machine,
+# not part of the project itself.
+.idea/
+*.iml
+.vscode/
+.classpath
+.project
+.settings/
+
+# Local Claude Code session files - not part of the project.
+.claude/
+
+# OS-generated files
+.DS_Store
+Thumbs.db

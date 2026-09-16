@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    WildFly ships its own logging library (JBoss LogManager's own SLF4J).
+    Spring Boot also brings its own logging library (Logback). When both
+    are visible to the same app at once, Spring Boot gets confused about
+    which one it's actually talking to and fails to start with:
+      "LoggerFactory is not a Logback LoggerContext but Logback is on
+       the classpath"
+
+    This file tells WildFly: for THIS app only, hide your own logging
+    modules and let the app use the one it brought with it (Logback).
+    This is the standard, documented fix for deploying a Spring Boot
+    WAR onto WildFly - it does not affect any other app on the server.
+-->
+<jboss-deployment-structure>
+    <deployment>
+        <exclusions>
+            <module name="org.apache.commons.logging"/>
+            <module name="org.jboss.logging"/>
+            <module name="org.jboss.logging.jul-to-slf4j-stub"/>
+            <module name="org.jboss.logmanager"/>
+            <module name="org.jboss.logmanager.log4j2"/>
+            <module name="org.jboss.slf4j"/>
+            <module name="org.slf4j"/>
+            <module name="org.slf4j.impl"/>
+        </exclusions>
+    </deployment>
+</jboss-deployment-structure>
