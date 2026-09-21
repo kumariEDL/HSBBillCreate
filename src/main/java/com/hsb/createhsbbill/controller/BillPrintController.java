@@ -7,13 +7,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
- * The createhsbbill API - PART 1.
+ * The createhsbbill API.
  *
- * Right now this only proves one row can be inserted correctly into the
- * real area(code)cycle(cycle)prt table. It does not yet build a real bill -
- * that is added on top of this, part by part, once this part is confirmed
- * to be correct.
+ * Calculates the real bill for every account in the given area + bill
+ * cycle, saves every field into the real area(code)cycle(cycle)prt table,
+ * and returns the same rows in the response.
  */
 @RestController
 @RequestMapping("/createhsbbill")
@@ -34,9 +35,9 @@ public class BillPrintController {
      * old Delphi code (Global.pas).
      */
     @PostMapping
-    public BillPrintFieldRow createHsbBill(
+    public List<BillPrintFieldRow> createHsbBill(
             @RequestParam String areaCode,
             @RequestParam int billCycle) {
-        return billPrintService.insertSampleRow(areaCode, billCycle);
+        return billPrintService.generateAndSaveBill(areaCode, billCycle);
     }
 }
